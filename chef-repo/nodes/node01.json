@@ -1,1 +1,6 @@
-{"run_list":[]}
+{
+  "run_list":[
+    "recipe[cook1]",
+    "recipe[base_packages]"
+  ]
+}
