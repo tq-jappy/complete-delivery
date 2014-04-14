@@ -7,4 +7,4 @@ An example (in progress)
 - Capistrano3
 - Chef
 - Serverspec
-- Docker
+- Vagrant and/or Docker
