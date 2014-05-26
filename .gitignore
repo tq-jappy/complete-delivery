@@ -1,3 +1,4 @@
 .vagrant/
 vagrant-ssh.conf
 spec/reports/
+share/chef-server/*.rpm
