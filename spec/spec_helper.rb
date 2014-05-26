@@ -1,46 +1,24 @@
 require 'serverspec'
 require 'pathname'
 require 'net/ssh'
+require 'yaml'
 
 include SpecInfra::Helper::Ssh
 include SpecInfra::Helper::DetectOS
+include SpecInfra::Helper::Properties
+
+properties = YAML.load_file('properties.yml')
 
 RSpec.configure do |c|
-  if ENV['ASK_SUDO_PASSWORD']
-    require 'highline/import'
-    c.sudo_password = ask("Enter sudo password: ") { |q| q.echo = false }
-  else
-    c.sudo_password = ENV['SUDO_PASSWORD']
-  end
-  c.before :all do
-    block = self.class.metadata[:example_group_block]
-    if RUBY_VERSION.start_with?('1.8')
-      file = block.to_s.match(/.*@(.*):[0-9]+>/)[1]
-    else
-      file = block.source_location.first
-    end
-    host  = File.basename(Pathname.new(file).dirname)
-    if c.host != host
-      c.ssh.close if c.ssh
-      c.host  = host
-      options = Net::SSH::Config.for(c.host, files=["vagrant-ssh.conf"])
-      user    = options[:user] || Etc.getlogin
-      vagrant_up = `vagrant up app01`
-      config = `vagrant ssh-config app01`
-      if config != ''
-        config.each_line do |line|
-          if match = /HostName (.*)/.match(line)
-            host = match[1]
-          elsif  match = /User (.*)/.match(line)
-            user = match[1]
-          elsif match = /IdentityFile (.*)/.match(line)
-            options[:keys] =  [match[1].gsub(/"/,'')]
-          elsif match = /Port (.*)/.match(line)
-            options[:port] = match[1]
-          end
-        end
-      end
-      c.ssh   = Net::SSH.start(host, user, options)
-    end
-  end
+  c.filter_run :force => true
+  c.run_all_when_everything_filtered = true
+
+  target_host = ENV['TARGET_HOST']
+
+  c.host = target_host
+  set_property properties[c.host]
+  options = Net::SSH::Config.for(c.host, files=["vagrant-ssh.conf"])
+  user    = options[:user] || Etc.getlogin
+  c.ssh   = Net::SSH.start(c.host, user, options)
+  c.os    = backend.check_os
 end
