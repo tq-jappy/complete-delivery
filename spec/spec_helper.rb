@@ -23,7 +23,7 @@ RSpec.configure do |c|
     if c.host != host
       c.ssh.close if c.ssh
       c.host  = host
-      options = Net::SSH::Config.for(c.host)
+      options = Net::SSH::Config.for(c.host, files=["vagrant-ssh.conf"])
       user    = options[:user] || Etc.getlogin
       vagrant_up = `vagrant up app01`
       config = `vagrant ssh-config app01`
