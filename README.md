@@ -11,7 +11,8 @@ An example (in progress)
 
 ## Prepare
 
-1. Download Chef Server RPM file(share/chef-server/chef-server-11.0.12-1.el6.x86_64.rpm)
+1. Download Chef Server RPM file (share/chef-server/chef-server-11.0.12-1.el6.x86_64.rpm)
+2. add entry ``192.168.33.10 chef-server`` (/etc/hosts)
 
 ## Setup
 
@@ -19,7 +20,7 @@ An example (in progress)
 [host]# vagrant box add centos {box url}
 ```
 
-## Install Chef Server
+## Build
 
 ```
 [host]# vagrant up chef_server
