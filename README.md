@@ -16,6 +16,11 @@ An example (in progress)
 ## Setup
 
 ```
-vagrant box add centos {box url}
+[host]# vagrant box add centos {box url}
 ```
 
+## Install Chef Server
+
+```
+[host]# vagrant up chef_server
+```
