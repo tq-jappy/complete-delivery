@@ -11,6 +11,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     chef_server.vm.hostname = "chef-server"
     chef_server.vm.network "private_network", ip: "192.168.33.10"
     chef_server.vm.synced_folder "share/chef-server", "/share", type: "rsync"
+
+    chef_server.vm.provision :chef_solo do |chef|
+      chef.cookbooks_path = "chef-repo/site-cookbooks"
+      chef.run_list = "recipe[chef-server]"
+    end
   end
 
   config.vm.define :web do |web|
