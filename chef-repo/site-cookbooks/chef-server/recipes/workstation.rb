@@ -25,6 +25,8 @@ bash "knife configure --initial" do
   user 'root'
   code <<-EOL
     knife configure --initial --config /root/.chef/knife.rb
+    cp /etc/chef-server/admin.pem /etc/chef
+    cp /etc/chef-server/chef-validation.pem /etc/chef/validation.pem
   EOL
-  not_if { File.exist?
+  not_if { File.exist?("/etc/chef/validation.pem")
 end
