@@ -14,7 +14,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     chef_server.vm.provision :chef_solo do |chef|
       chef.cookbooks_path = "chef-repo/site-cookbooks"
-      chef.run_list = "recipe[chef-server]"
+      chef.run_list = "recipe[chef-server],recipe[chef-server::workstation]"
     end
   end
 

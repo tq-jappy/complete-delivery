@@ -23,3 +23,8 @@ bash "reconfigure chef server" do
     chef-server-ctl reconfigure
   EOL
 end
+
+# FIXME:
+service "iptables" do
+  action [:stop, :disable]
+end

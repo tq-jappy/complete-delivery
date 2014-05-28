@@ -1,0 +1,50 @@
+bash -c '
+<%= "export http_proxy=\"#{knife_config[:bootstrap_proxy]}\"" if knife_config[:bootstrap_proxy] -%>
+
+<%= knife_config %>
+exit 1
+<% chef_server = { host: "chef-server", ip_addr: "192.168.33.10" } %>
+<% repo_server = { host: "repository",  ip_addr: "192.168.33.20" } %>
+
+if [ ! -f /root/.ssh/authorized_keys ]; then
+  if [ ! -d /root/.ssh ]; then
+    mkdir -m 700 /root/.ssh
+  fi
+  touch /root/.ssh/authorized_keys
+  chmod 600 /root/.ssh/authorized_keys
+fi
+
+if [ `cat /root/.ssh/authorized_keys | grep <%= chef_server[:host] %> | wc -l` -eq 0 ]; then
+cat >> /root/.ssh/authorized_keys <<'EOP'
+<%= IO.read("/root/.ssh/id_rsa.pub").strip %>
+EOP
+fi
+
+<% [chef_server, repo_server].each do |server| %>
+if [ `cat /etc/hosts | grep <%= server[:host] %> | wc -l` -eq 0 ]; then
+  echo "<%= server[:ip_addr] %> <%= server[:host] %>" >> /etc/hosts
+fi
+<% end %>
+
+wget http://<%= repo_server[:host] %>/rpm/chef/chef-11.10.4-1.el6.x86_64.rpm -P /tmp
+rpm -ivh /tmp/chef-11.10.4-1.el6.x86_64.rpm
+
+mkdir -p /etc/chef
+
+cat > /tmp/validation.pem <<'EOP'
+<%= validation_key %>
+EOP
+awk NF /tmp/validation.pem > /etc/chef/validation.pem
+rm /tmp/validation.pem
+
+cat > /etc/chef/client.rb <<'EOP'
+<%= config_content %>
+EOP
+
+cat > /etc/chef/first-boot.json <<'EOP'
+<%= { "run_list" => @run_list }.to_json %>
+EOP
+
+echo "Starting first Chef Client run..."
+
+<%= start_chef %>'

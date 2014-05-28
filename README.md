@@ -9,6 +9,12 @@ An example (in progress)
 - Serverspec
 - Vagrant and/or Docker
 
+## VM
+
+- chef-server (192.168.33.10)
+ - Chef Server & Workstation
+- repository (192.168.33.20)
+
 ## Prepare
 
 1. Download Chef Server RPM file (share/chef-server/chef-server-11.0.12-1.el6.x86_64.rpm)
