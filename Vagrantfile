@@ -18,9 +18,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
   end
 
-  config.vm.define :web do |web|
-    web.vm.hostname = "web"
-    web.vm.network :private_network, ip: "192.168.33.20"
+  config.vm.define :repo do |repo|
+    repo.vm.hostname = "repository"
+    repo.vm.network :private_network, ip: "192.168.33.20"
   end
 
 
