@@ -16,3 +16,10 @@ rpm_package "chef-server" do
   action :install
   source node["chef_server"]["rpm_file"]
 end
+
+bash "reconfigure chef server" do
+  user 'root'
+  code <<-EOL
+    chef-server-ctl reconfigure
+  EOL
+end
