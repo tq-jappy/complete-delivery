@@ -1,8 +1,6 @@
 bash -c '
 <%= "export http_proxy=\"#{knife_config[:bootstrap_proxy]}\"" if knife_config[:bootstrap_proxy] -%>
 
-<%= knife_config %>
-exit 1
 <% chef_server = { host: "chef-server", ip_addr: "192.168.33.10" } %>
 <% repo_server = { host: "repository",  ip_addr: "192.168.33.20" } %>
 
@@ -26,7 +24,7 @@ if [ `cat /etc/hosts | grep <%= server[:host] %> | wc -l` -eq 0 ]; then
 fi
 <% end %>
 
-wget http://<%= repo_server[:host] %>/rpm/chef/chef-11.10.4-1.el6.x86_64.rpm -P /tmp
+# wget http://<%= repo_server[:host] %>/rpm/chef/chef-11.10.4-1.el6.x86_64.rpm -P /tmp
 rpm -ivh /tmp/chef-11.10.4-1.el6.x86_64.rpm
 
 mkdir -p /etc/chef

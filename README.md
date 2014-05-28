@@ -26,6 +26,12 @@ An example (in progress)
 [host]# vagrant box add centos {box url}
 ```
 
+## Knife bootstrap
+
+```
+[chef-server]# knife bootstrap 192.168.33.20 --template-file=rhel6-bootstrap.erb -P vagrant
+```
+
 ## Build
 
 ```
