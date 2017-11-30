@@ -19,7 +19,7 @@ GEM
       ohai (~> 6.0)
       pry (~> 0.9)
       puma (~> 1.6)
-      rest-client (>= 1.0.4, < 1.7.0)
+      rest-client (~> 1.7.3)
       yajl-ruby (~> 1.1)
     chef-zero (1.7.3)
       hashie (~> 2.0)
